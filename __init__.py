@@ -50,7 +50,7 @@ class Station(object):
 
 
 class Pipe(object):
-    def __init__(self, pin):
+    def __init__(self, station, pin):
         assert type(station) is Station, "Wrong argument type: {}".format(str(type(station)))
         station.checkConnection()
         station.pipes.append(self)
