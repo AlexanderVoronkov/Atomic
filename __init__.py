@@ -59,6 +59,8 @@ class Pipe():
         self.power = None
 
     def setPower(self, val):
+        error = "Wrong value {}: must be between 0 and 100"
+        assert val <= 100 and val>=0, error
         sendMsg("set P{}={}".format(self.pin, val))
 
 
@@ -90,4 +92,6 @@ class Heater():
             assert self.num != heater.num, error2
 
     def setPower(self, val):
+        error = "Wrong value: {}, must be between 0 and 100".format(val)
+        assert val <= 100 and val >= 0,
         sendMsg("set H{}={}".format(self.num, val))
