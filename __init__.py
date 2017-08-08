@@ -18,12 +18,13 @@ def getMsg():
         return msg[3:]
 
 
-class Station(object):
+class Station():
     def __init__(self):
         self.connection = False
         self.power = False
         self.pipes = []
         self.sensors = []
+        self.heaters = []
 
     def checkConnection(self):
         error = "Connect the model before performing any actions"
@@ -49,7 +50,7 @@ class Station(object):
         return int(getMsg())
 
 
-class Pipe(object):
+class Pipe():
     def __init__(self, station, pin):
         assert type(station) is Station, "Wrong argument type: {}".format(str(type(station)))
         station.checkConnection()
@@ -61,7 +62,7 @@ class Pipe(object):
         sendMsg("set P{}={}".format(self.pin, val))
 
 
-class Sensor(object):
+class Sensor():
     def __init__(self, station, pin):
         assert type(station) is Station, "Wrong argument type: {}".format(str(type(station)))
         station.checkConnection()
@@ -72,3 +73,21 @@ class Sensor(object):
     def getValue(self):
         sendMsg("get S{}".format(self.pin))
         return int(getMsg())
+
+
+class Heater():
+    def __init__(self, station, num):
+        assert type(station) is Station, "Wrong argument type: {}".format(str(type(station)))
+        station.checkConnection()
+        self.num = num
+        self.checkAvailible(station)
+
+    def checkAvailible(self, station):
+        error1 = "Heater not availible"
+        error2 = "Heater already exists"
+        assert self.num == 0 or self.num == 1, error1
+        for heater in station.heaters:
+            assert self.num != heater.num, error2
+
+    def setPower(self, val):
+        sendMsg("set H{}={}".format(self.num, val))
